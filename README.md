@@ -39,7 +39,7 @@ for cleanup
 
 ```lua
 
-    local gh = require('geohash'):new()
+    local gh = require('geohash').new()
 
     -- directions
     --[[
@@ -84,5 +84,6 @@ see test.lua ...
 
 + support luvit module style
 + create a test suite
++ improve makefile
 
 % June 30th, 2013 -03 GMT

@@ -11,6 +11,10 @@
 #define LUA_API __declspec(dllexport)
 #endif
 
+#define lua_set_const(L, con, name) {lua_pushnumber(L, con); lua_setfield(L, -2, name);}
+#define lua_set_sconst(L, con, name) {lua_pushstring(L, con); lua_setfield(L, -2, name);}
+#define LIBIWI "iwi"
+
 static double const MILES      = 3963.1903;
 static double const KILOMETERS = 6378.1366;
 

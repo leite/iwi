@@ -1,10 +1,12 @@
-local iwi = require('iwi')
+#!/usr/bin/env lua
+
+local iwi  = require('iwi')
 local math = require('math')
 
-assert(type(iwi)=='table', "fail, iwi should br a table")
+assert(type(iwi)=='table', "fail, iwi should be a table")
 
 local hash = iwi.encode(23.10, 45.467, 10)
-assert(type(hash)=='string', "fail, hash should br a string")
+assert(type(hash)=='string', "fail, hash should be a string")
 
 local min_lat, max_lat, min_lon, max_long = iwi.decode(hash)
 

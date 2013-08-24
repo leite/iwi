@@ -39,40 +39,42 @@ for cleanup
 
 ```lua
 
-    local gh = require('geohash')
+local gh = require('iwi')
 
-    -- directions
-    --[[
-    gh.west
-    gh.east
-    gh.north
-    gh.south
-    --]]
-    -- units
-    --[[
-    gh.miles
-    gh.kilometers
-    ]]
+-- directions
+--[[
+gh.west
+gh.east
+gh.north
+gh.south
+--]]
+-- units
+--[[
+gh.miles
+gh.kilometers
+]]
 
-    -- encodes latitude, and longitude with length
-    -- returns geohash
-    local geohash = gh.encode(23.11, 47.999, 5)
+-- encodes latitude, and longitude with length
+-- returns geohash
+local geohash = gh.encode(23.11, 47.999, 5)
 
-    -- decodes geohash
-    -- returns min_latiture, max_latitude, min_longitude and max_longitude 
-    local min_lat, max_lat, min_lon, max_lon = gh.decode("abY9x")
+-- decodes geohash
+-- returns min_latiture, max_latitude, min_longitude and max_longitude 
+local min_lat, max_lat, min_lon, max_lon = gh.decode("abY9x")
 
-    -- get adjacent hash by origin's hash and direction
-    -- returns adjacent hash
-    local adj_geohash = gh.adjacent("abY9x", gh.west or gh.east or gh.north or gh.south)
+-- get adjacent hash by origin's hash and direction
+-- returns adjacent hash
+local adj_geohash = gh.adjacent("abY9x", gh.west or gh.east or gh.north or gh.south)
 
-    -- get neighbors' hash by origin's hash
-    -- return a table with north, north_east, north_west, south, south_east, south_west, east and west neighbors
-    local neighbors = gh.neighbors("abY9x")
+-- get neighbors' hash by origin's hash
+-- return a table with north, north_east, north_west, 
+--   south, south_east, south_west, east and west neighbors
+local neighbors = gh.neighbors("abY9x")
 
-    -- this is an optional feature, i think it might be useful
-    -- get distance between two pairs of longitude and latitude with optional unit, defaults to kilometers
-    local distance = gh.distance(lat, lon, lat2, lon2, gh.kilometers or gh.miles or nil)
+-- this is an optional feature, i think it might be useful
+-- get distance between two pairs of longitude and latitude with optional unit,
+--   defaults to kilometers
+local distance = gh.distance(lat, lon, lat2, lon2, gh.kilometers or gh.miles or nil)
 
 ``` 
 

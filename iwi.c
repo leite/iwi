@@ -18,11 +18,11 @@
 
 // meta methods
 const struct luaL_reg iwi_methods[] = {
-  {"encode",    iwi_encode},
-  {"decode",    iwi_decode},
-  {"adjacent",  iwi_adjacent},
-  {"distance",  iwi_distance},
-  {"neighbors", iwi_neighbors},
+  {"encode",    &iwi_encode},
+  {"decode",    &iwi_decode},
+  {"adjacent",  &iwi_adjacent},
+  {"distance",  &iwi_distance},
+  {"neighbors", &iwi_neighbors},
   {NULL,        NULL}
 };
 
@@ -68,16 +68,19 @@ static int iwi_adjacent(lua_State *L) {
   adj_hash  = luaL_checkstring(L, 1);
   direction = luaL_checknumber(L, 2);
 
-  if(
-      GEOHASH_NORTH!=direction && GEOHASH_SOUTH!=direction &&
-      GEOHASH_EAST!=direction && GEOHASH_WEST!=direction
-    ) {
-    lua_pushstring(L, "invalid adjacent constant value");
-    lua_error(L);
-  } 
-
-  adj_hash = GEOHASH_get_adjacent(adj_hash, direction);
-  lua_pushlstring(L, adj_hash, sizeof(adj_hash));
+  switch(direction) {
+    case GEOHASH_NORTH:
+    case GEOHASH_SOUTH:
+    case GEOHASH_EAST:
+    case GEOHASH_WEST:
+      adj_hash = GEOHASH_get_adjacent(adj_hash, direction);
+      lua_pushlstring(L, adj_hash, sizeof(adj_hash));
+      break;
+    default:
+      lua_pushstring(L, "invalid adjacent constant value");
+      lua_error(L);
+      break;
+  }
 
   free((char*)adj_hash);
   return 1;
@@ -92,27 +95,15 @@ static int iwi_neighbors(lua_State *L) {
   neighbors = GEOHASH_get_neighbors(hash);
 
   lua_newtable(L);
-  
-  lua_pushlstring(L, neighbors->north, sizeof(neighbors->north));
-  lua_setfield(L, -2, "north");
-  
-  lua_pushlstring(L, neighbors->north_east, sizeof(neighbors->north_east));
-  lua_setfield(L, -2, "north_east");
-  
-  lua_pushlstring(L, neighbors->north_west, sizeof(neighbors->north_west));
-  lua_setfield(L, -2, "north_west");
-  
-  lua_pushlstring(L, neighbors->south, sizeof(neighbors->south));
-  lua_setfield(L, -2, "south");
-  
-  lua_pushlstring(L, neighbors->south_east, sizeof(neighbors->south_east));
-  lua_setfield(L, -2, "south_east");
-  
-  lua_pushlstring(L, neighbors->east, sizeof(neighbors->east));
-  lua_setfield(L, -2, "east");
 
-  lua_pushlstring(L, neighbors->west, sizeof(neighbors->west));
-  lua_setfield(L, -2, "west");
+  lua_set_sconst(L, neighbors->north,      "north");
+  lua_set_sconst(L, neighbors->north_east, "north_east");
+  lua_set_sconst(L, neighbors->north_west, "north_west");
+  lua_set_sconst(L, neighbors->south,      "south");
+  lua_set_sconst(L, neighbors->south_east, "south_east");
+  lua_set_sconst(L, neighbors->south_west, "south_west");
+  lua_set_sconst(L, neighbors->east,       "east");
+  lua_set_sconst(L, neighbors->west,       "west");
 
   GEOHASH_free_neighbors(neighbors);
   return 1;
@@ -153,20 +144,14 @@ static int iwi_distance(lua_State *L) {
 
 // register lib
 LUALIB_API int luaopen_iwi(lua_State *L) {
-  luaL_register(L, "iwi", iwi_methods);
+  luaL_register(L, LIBIWI, iwi_methods);
 
-  lua_pushnumber(L, GEOHASH_NORTH);
-  lua_setfield(L, -2, "north");
-  lua_pushnumber(L, GEOHASH_SOUTH);
-  lua_setfield(L, -2, "south");
-  lua_pushnumber(L, GEOHASH_WEST);
-  lua_setfield(L, -2, "west");
-  lua_pushnumber(L, GEOHASH_EAST);
-  lua_setfield(L, -2, "east");
-  lua_pushnumber(L, MILES);
-  lua_setfield(L, -2, "miles");
-  lua_pushnumber(L, KILOMETERS);
-  lua_setfield(L, -2, "kilometers");
+  lua_set_const(L, GEOHASH_NORTH, "north");
+  lua_set_const(L, GEOHASH_SOUTH, "south");
+  lua_set_const(L, GEOHASH_WEST,  "west");
+  lua_set_const(L, GEOHASH_EAST,  "east");
+  lua_set_const(L, MILES,         "miles");
+  lua_set_const(L, KILOMETERS,    "kilometers");
 
   return 1;
 }

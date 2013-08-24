@@ -15,14 +15,7 @@ SHARE =-shared
 CFLAGS =$(LIBOPT) $(OPTS) $(INCS) -fPIC
 CFLAGS_LIB =$(SHARE) $(OPTS) $(LIBS) $(INCS)
 
-# Strip the binary for our prod build
-STRIP =strip
-
-# UPX pack to minimise size for our prod build
-UPX =upx
-UPXFLAG =-9
-
-.PHONY: clean release all
+.PHONY: all release clean debug
 
 all: $(LIBNAME)$(LIBSUFFIX) $(LIBNAME).o
 	[ -f $(LIBNAME).o ] && \rm $(LIBNAME).o
@@ -34,8 +27,11 @@ $(LIBNAME).o: $(LIBNAME).c
 	$(CC) -o $@ $^ $(CFLAGS)
 
 release: $(LIBNAME)$(LIBSUFFIX)
-	$(STRIP) $<
-	$(UPX) $(UPXFLAG) $<
+	$(if $(shell which strip), strip $<)
+	$(if $(shell which upx), upx --best $<)
 
 clean:
-	rm *.o *.dll *.so
+	\rm -f *.o *.dll *.so
+
+debug: CC += -DDEBUG
+debug: all

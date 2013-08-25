@@ -64,7 +64,7 @@ local min_lat, max_lat, min_lon, max_lon = gh.decode("abY9x")
 
 -- get adjacent hash by origin's hash and direction
 -- returns adjacent hash
-local adj_geohash = gh.adjacent("abY9x", gh.west or gh.east or gh.north or gh.south)
+local adj_geohash = gh.adjacent("abY9x", gh.west) -- or .east, .north, .south
 
 -- get neighbors' hash by origin's hash
 -- return a table with north, north_east, north_west, 
@@ -74,7 +74,7 @@ local neighbors = gh.neighbors("abY9x")
 -- this is an optional feature, i think it might be useful
 -- get distance between two pairs of longitude and latitude with optional unit,
 --   defaults to kilometers
-local distance = gh.distance(lat, lon, lat2, lon2, gh.kilometers or gh.miles or nil)
+local distance = gh.distance(lat, lon, lat2, lon2, gh.kilometers) -- or gh.miles or nothing
 
 -- verify geohash, returns boolean
 print(gh.verify("abY9x"))

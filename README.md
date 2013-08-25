@@ -76,6 +76,9 @@ local neighbors = gh.neighbors("abY9x")
 --   defaults to kilometers
 local distance = gh.distance(lat, lon, lat2, lon2, gh.kilometers or gh.miles or nil)
 
+-- verify geohash, returns boolean
+print(gh.verify("abY9x"))
+
 ``` 
 
 # tests

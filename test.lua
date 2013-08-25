@@ -8,6 +8,8 @@ assert(type(iwi)=='table', "fail, iwi should be a table")
 local hash = iwi.encode(23.10, 45.467, 10)
 assert(type(hash)=='string', "fail, hash should be a string")
 
+print(iwi.verify("th076thp39"))
+
 local min_lat, max_lat, min_lon, max_long = iwi.decode(hash)
 
 print(hash)

@@ -9,7 +9,7 @@ LIBSDIR =-L/usr/local/lib -L/usr/lib
 # basic setup
 CC =gcc
 LIBS =$(LIBSDIR) -lm -lgeohash
-OPTS =-O3
+OPTS =-O3 -Wall
 LIBOPT =-c
 SHARE =-shared
 CFLAGS =$(LIBOPT) $(OPTS) $(INCS) -fPIC

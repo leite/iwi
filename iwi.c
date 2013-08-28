@@ -151,7 +151,11 @@ const struct luaL_Reg iwi_methods[] = {
 
 // register lib
 LUALIB_API int luaopen_iwi(lua_State *L) {
+#if LUA_VERSION_NUM >= 502
+  luaL_newlib(L, iwi_methods);
+#else
   luaL_register(L, LIBIWI, iwi_methods);
+#endif
 
   lua_set_const(L, GEOHASH_NORTH, "north");
   lua_set_const(L, GEOHASH_SOUTH, "south");

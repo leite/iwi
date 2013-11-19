@@ -138,15 +138,46 @@ static int iwi_distance(lua_State *L) {
   return 1;
 }
 
+// 
+static int iwi_destination(lua_State *L) {
+  double lat2, lon2, measure;
+
+  double lat     = (double)luaL_checknumber(L, 1);
+  double lon     = (double)luaL_checknumber(L, 2);
+  double bearing = (double)luaL_checknumber(L, 3);
+  double dist    = (double)luaL_checknumber(L, 4);
+
+  if(lua_gettop(L)==5) {
+    measure = (double)luaL_checknumber(L, 5);
+    if(KILOMETERS!=measure && MILES!=measure)
+      return luaL_error(L, "invalid measure constant value");
+  } else {
+    measure = KILOMETERS;
+  }
+
+  lat     = (M_PI*lat)     / 180.0;
+  lon     = (M_PI*lon)     / 180.0;
+  bearing = (M_PI*bearing) / 180.0;
+  dist    = dist / measure;
+
+  lat2 = asin(((sin(lat) * cos(dist)) + (cos(lat) * sin(dist) * cos(bearing))));
+  lon2 = lon + atan2((sin(bearing) * sin(dist) * cos(lat)), (cos(dist) - (sin(lat) * sin(lat2))));
+
+  lua_pushnumber(L, ((lat2 * 180) / M_PI));
+  lua_pushnumber(L, (((fmod((lon2 + (3 * M_PI)), (2 * M_PI)) - M_PI) * 180) / M_PI));
+  return 2;
+}
+
 // meta methods
 const struct luaL_Reg iwi_methods[] = {
-  {"encode",    &iwi_encode},
-  {"decode",    &iwi_decode},
-  {"adjacent",  &iwi_adjacent},
-  {"distance",  &iwi_distance},
-  {"neighbors", &iwi_neighbors},
-  {"verify",    &iwi_verify},
-  {NULL,        NULL}
+  {"encode",      &iwi_encode},
+  {"decode",      &iwi_decode},
+  {"adjacent",    &iwi_adjacent},
+  {"distance",    &iwi_distance},
+  {"destination", &iwi_destination},
+  {"neighbors",   &iwi_neighbors},
+  {"verify",      &iwi_verify},
+  {NULL,          NULL}
 };
 
 // register lib

@@ -19,6 +19,13 @@ print(iwi.adjacent(hash, iwi.east))
 print(iwi.distance(-23.864529, -46.789355, -23.883562, -46.793947))
 print(iwi.distance(-23.722144, -46.691809, -22.947378, -48.430974))
 print(iwi.distance(-23.722144, -46.691809, -23.722144, -46.691809))
+
+local lat, lon = iwi.destination(-23.722144, -46.691809, 90.0, 5.3)
+print(lat, lon)
+print(iwi.distance(-23.722144, -46.691809, lat, lon))
+print(iwi.distance(-23.722144, -46.691809, -23.72222, -46.639722))
+print("")
+
 local neighbors = iwi.neighbors(hash)
 
 for k,v in pairs(neighbors) do

@@ -3,15 +3,14 @@ LIBNAME =iwi
 LIBSUFFIX =.so
 
 # common prefix 
-INCS =-I/usr/local/include -I/usr/include -I/usr/local/include/luvit/luajit -I.
-LIBSDIR =-L/usr/local/lib -L/usr/lib
+INCS =-I/usr/local/include -I/usr/include -I../luajit-2.0/src -I../libgeohash/include/geohash
+LIBSDIR =-L/usr/local/lib -L/usr/lib -L../luajit-2.0/src/ -L../libgeohash/build/lib
 
 # basic setup
 CC =gcc
 LIBS =$(LIBSDIR) -lm -lgeohash
 OPTS =-O3 -Wall
 LIBOPT =-c
-SHARE =-shared
 CFLAGS =$(LIBOPT) $(OPTS) $(INCS) -fPIC
 CFLAGS_LIB =$(SHARE) $(OPTS) $(LIBS) $(INCS)
 

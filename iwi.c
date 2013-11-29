@@ -27,6 +27,7 @@
 
 static double const MILES      = 3963.1903;
 static double const KILOMETERS = 6378.1366;
+static long long const BITMASK = 0xFFFFFFFFFFFFFFFF;
 
 //
 static int iwi_verify(lua_State *L) {
@@ -47,6 +48,34 @@ static int iwi_encode(lua_State *L) {
 
   free(hash);
   return 1;
+}
+
+static int iwi_encode_double(lua_State *L) {
+
+  double lat  = (double)luaL_checknumber(L, 1);
+  double lon  = (double)luaL_checknumber(L, 2);
+  int    len  = luaL_checknumber(L, 3);
+
+  lua_pushnumber(L, GEOHASH_encode_double(lat, lon, len));
+  return 1;
+}
+
+static int iwi_get_bbox_range(lua_State *L) {
+
+  double geohash   = (double)luaL_checknumber(L, 1);
+  int    range     = luaL_checknumber(L, 2);
+  long long rangeLow  = (long long)geohash;
+  long long rangeHigh = (long long)geohash;
+  int    i;
+  
+  for (i = 0; i < range; i++) {
+    rangeHigh |= 0x1F << (i * 5);
+  }
+  rangeLow &= BITMASK << (range * 5);
+
+  lua_pushnumber(L, (double)rangeLow);
+  lua_pushnumber(L, (double)rangeHigh);
+  return 2;
 }
 
 // 
@@ -170,14 +199,16 @@ static int iwi_destination(lua_State *L) {
 
 // meta methods
 const struct luaL_Reg iwi_methods[] = {
-  {"encode",      &iwi_encode},
-  {"decode",      &iwi_decode},
-  {"adjacent",    &iwi_adjacent},
-  {"distance",    &iwi_distance},
-  {"destination", &iwi_destination},
-  {"neighbors",   &iwi_neighbors},
-  {"verify",      &iwi_verify},
-  {NULL,          NULL}
+  {"encode",         &iwi_encode},
+  {"encode_double",  &iwi_encode_double},
+  {"decode",         &iwi_decode},
+  {"adjacent",       &iwi_adjacent},
+  {"distance",       &iwi_distance},
+  {"destination",    &iwi_destination},
+  {"get_bbox",       &iwi_get_bbox_range},
+  {"neighbors",      &iwi_neighbors},
+  {"verify",         &iwi_verify},
+  {NULL,             NULL}
 };
 
 // register lib

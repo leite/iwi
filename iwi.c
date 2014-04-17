@@ -64,7 +64,7 @@ static int iwi_get_bbox_range(lua_State *L) {
   unsigned long long rangeLow  = (unsigned long long)geohash;
   unsigned long long rangeHigh = (unsigned long long)geohash;
 
-  rangeHigh |= (((unsigned long long) 0x1 << (range)) - 1);
+  rangeHigh |= (((unsigned long long int) 0x1 << (range)) - 1);
   rangeLow &= BITMASK << range;
 
   lua_pushnumber(L, (double)rangeLow);

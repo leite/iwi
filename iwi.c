@@ -27,7 +27,7 @@
 
 static double const MILES      = 3963.1903;
 static double const KILOMETERS = 6378.1366;
-static long long const BITMASK = 0xFFFFFFFFFFFFFFFF;
+static unsigned long long const BITMASK = 0xFFFFFFFFFFFFFFFF;
 
 //
 static int iwi_verify(lua_State *L) {
@@ -38,7 +38,6 @@ static int iwi_verify(lua_State *L) {
 
 // 
 static int iwi_encode(lua_State *L) {
-
   double lat  = (double)luaL_checknumber(L, 1);
   double lon  = (double)luaL_checknumber(L, 2);
   int    len  = luaL_checknumber(L, 3);
@@ -51,7 +50,6 @@ static int iwi_encode(lua_State *L) {
 }
 
 static int iwi_encode_double(lua_State *L) {
-
   double lat  = (double)luaL_checknumber(L, 1);
   double lon  = (double)luaL_checknumber(L, 2);
   int    len  = luaL_checknumber(L, 3);
@@ -61,17 +59,18 @@ static int iwi_encode_double(lua_State *L) {
 }
 
 static int iwi_get_bbox_range(lua_State *L) {
-
   double geohash   = (double)luaL_checknumber(L, 1);
   int    range     = luaL_checknumber(L, 2);
-  long long rangeLow  = (long long)geohash;
-  long long rangeHigh = (long long)geohash;
-  int    i;
-  
-  for (i = 0; i < range; i++) {
-    rangeHigh |= 0x1F << (i * 5);
-  }
-  rangeLow &= BITMASK << (range * 5);
+  unsigned long long rangeLow  = (unsigned long long)geohash;
+  unsigned long long rangeHigh = (unsigned long long)geohash;
+
+  printf("ORIG VAL %llx\n", rangeLow);
+  printf("RANGE %i\n", range);
+  printf("HIGH MASK %llx\n", (((unsigned long long) 0x1 << (range)) - 1));
+  printf("LOW MASK %llx\n", (unsigned long long) BITMASK << range);
+  rangeHigh |= (((unsigned long long) 0x1 << (range)) - 1);
+  rangeLow &= BITMASK << range;
+  printf("HIGH: %llx LOW: %llx \n", rangeHigh, rangeLow);
 
   lua_pushnumber(L, (double)rangeLow);
   lua_pushnumber(L, (double)rangeHigh);

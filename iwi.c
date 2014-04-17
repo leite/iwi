@@ -22,6 +22,10 @@
 #define LUA_API __declspec(dllexport)
 #endif
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define lua_set_const(L, con, name) {lua_pushnumber(L, con); lua_setfield(L, -2, name);}
 #define lua_set_sconst(L, con, name) {lua_pushstring(L, con); lua_setfield(L, -2, name);}
 #define LIBIWI "iwi"

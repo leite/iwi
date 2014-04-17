@@ -3,7 +3,7 @@ LIBNAME =iwi
 LIBSUFFIX =.so
 
 # common prefix 
-INCS =-I/usr/local/include -I/usr/include -I../luajit-2.0/src -I../libgeohash/include/geohash
+INCS =-I/usr/local/include -I/usr/include -I../luajit-2.0/src -I../libgeohash/include
 LIBSDIR =-L/usr/local/lib -L/usr/lib -L../luajit-2.0/src/ -L../libgeohash/build/lib
 
 # basic setup

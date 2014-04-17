@@ -11,7 +11,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <string.h>
-#include <geohash.h>
+#include <geohash/geohash.h>
 
 #include <lua.h>
 #include <lauxlib.h>

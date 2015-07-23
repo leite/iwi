@@ -1,10 +1,8 @@
-/*
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <xxleite@gmail.com> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return
- * ----------------------------------------------------------------------------
+/**
+ *
+ * License: https://www.gnu.org/licenses/lgpl.html LGPL version 3
+ * Authors: leite <xico@simbio.se> and Steve Salevan <steve.salevan@gmail.com>
+ *
  */
 
 #include <stdint.h>
@@ -12,7 +10,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <string.h>
-#include <geohash/geohash.h>
+#include <geohash.h>
 
 #include <lua.h>
 #include <lauxlib.h>
@@ -26,13 +24,16 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#if LUA_VERSION_NUM > 501
+#define luaL_register(L,n,l)  (luaL_newlib(L,l))
+#endif
+
 #define lua_set_const(L, con, name) {lua_pushnumber(L, con); lua_setfield(L, -2, name);}
 #define lua_set_sconst(L, con, name) {lua_pushstring(L, con); lua_setfield(L, -2, name);}
-#define LIBIWI "iwi"
 
 static double const MILES      = 3963.1903;
 static double const KILOMETERS = 6378.1366;
-static unsigned long long const BITMASK = 0xFFFFFFFFFFFFFFFF;
+
 
 //
 static int iwi_verify(lua_State *L) {
@@ -53,6 +54,10 @@ static int iwi_encode(lua_State *L) {
   free(hash);
   return 1;
 }
+
+#ifdef DEBUG
+
+static unsigned long long const BITMASK = 0xFFFFFFFFFFFFFFFF;
 
 static int iwi_encode_double(lua_State *L) {
   double lat  = (double)luaL_checknumber(L, 1);
@@ -76,6 +81,8 @@ static int iwi_get_bbox_range(lua_State *L) {
   lua_pushnumber(L, (double)rangeHigh);
   return 2;
 }
+
+#endif
 
 // 
 static int iwi_decode(lua_State *L) {
@@ -198,13 +205,15 @@ static int iwi_destination(lua_State *L) {
 
 // meta methods
 const struct luaL_Reg iwi_methods[] = {
-  {"encode",         &iwi_encode},
+#ifdef DEBUG
   {"encode_double",  &iwi_encode_double},
+  {"get_bbox",       &iwi_get_bbox_range},
+#endif
+  {"encode",         &iwi_encode},
   {"decode",         &iwi_decode},
   {"adjacent",       &iwi_adjacent},
   {"distance",       &iwi_distance},
   {"destination",    &iwi_destination},
-  {"get_bbox",       &iwi_get_bbox_range},
   {"neighbors",      &iwi_neighbors},
   {"verify",         &iwi_verify},
   {NULL,             NULL}
@@ -212,11 +221,9 @@ const struct luaL_Reg iwi_methods[] = {
 
 // register lib
 LUALIB_API int luaopen_iwi(lua_State *L) {
-#if LUA_VERSION_NUM >= 502
-  luaL_newlib(L, iwi_methods);
-#else
-  luaL_register(L, LIBIWI, iwi_methods);
-#endif
+
+  lua_newtable(L);
+  luaL_register(L, NULL, iwi_methods);
 
   lua_set_const(L, GEOHASH_NORTH, "north");
   lua_set_const(L, GEOHASH_SOUTH, "south");

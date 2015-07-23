@@ -12,7 +12,7 @@ please fill an issue or help it doing a clone and then a pull request.
 
 # license
 
-[BEER-WARE](http://en.wikipedia.org/wiki/Beerware), see source
+[LGPL version 3](http://en.wikipedia.org/wiki/Beerware), see COPYING and source
 
 # prerequisites
 
@@ -22,6 +22,13 @@ please fill an issue or help it doing a clone and then a pull request.
 + [upx](http://upx.sourceforge.net/) (optional)
 
 # installation
+
+
+## luarocks
+
+    # luarocks install iwi
+
+## make
 
 compatible with *NIX systens, supposed to works on windows. You only need to edit some vars on makefile, for basic instalation use:
 
@@ -71,10 +78,15 @@ local adj_geohash = gh.adjacent("abY9x", gh.west) -- or .east, .north, .south
 --   south, south_east, south_west, east and west neighbors
 local neighbors = gh.neighbors("abY9x")
 
--- this is an optional feature, i think it might be useful
+-- this is an extra feature, i think it might be useful
 -- get distance between two pairs of longitude and latitude with optional unit,
 --   defaults to kilometers
 local distance = gh.distance(lat, lon, lat2, lon2, gh.kilometers) -- or gh.miles or nothing
+
+-- another extra feature.
+-- get resulting latitude and longitude according to bearing and distance with optional unit,
+--   defaults to kilometers
+local destination = gh.destination(lat, lon, 90.0, 5.6) -- or gh.miles or nothing
 
 -- verify geohash, returns boolean
 print(gh.verify("abY9x"))
@@ -83,12 +95,4 @@ print(gh.verify("abY9x"))
 
 # tests
 
-see test.lua ...
-
-# TODO
-
-+ support luvit module style
-+ create a test suite
-+ improve makefile
-
-% June 30th, 2013 -03 GMT
+run [busted](https://github.com/Olivine-Labs/busted), see spec folder

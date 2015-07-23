@@ -12,7 +12,7 @@ LIBS =$(LIBSDIR) -lm -lgeohash
 OPTS =-O3 -Wall
 LIBOPT =-c
 CFLAGS =$(LIBOPT) $(OPTS) $(INCS) -fPIC
-CFLAGS_LIB =$(SHARE) $(OPTS) $(LIBS) $(INCS)
+CFLAGS_LIB =-shared $(OPTS) $(LIBS) $(INCS)
 
 .PHONY: all release clean debug
 

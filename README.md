@@ -12,7 +12,7 @@ please fill an issue or help it doing a clone and then a pull request.
 
 # license
 
-[LGPL version 3](http://en.wikipedia.org/wiki/Beerware), see COPYING and source
+[LGPL version 3](https://www.gnu.org/licenses/lgpl-3.0-standalone.html), see COPYING and source
 
 # prerequisites
 

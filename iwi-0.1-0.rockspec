@@ -13,8 +13,6 @@ source = {
   branch = "v0.1"
 }
 
-dependencies = {"lua >= 5.1, < 5.3"}
-
 external_dependencies = {
   platforms = {
     unix = {

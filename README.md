@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/leite/iwi.png?branch=master)](https://travis-ci.org/leite/iwi)
+[![License](http://img.shields.io/badge/License-LGPL%20v3-brightgreen.svg)](LICENSE)
+
 # summary
 
 iwi is a simple [Lua](http://www.lua.org/) [geohash](http://en.wikipedia.org/wiki/Geohash) binding for [libgeohash](https://github.com/lyokato/libgeohash).

@@ -1,0 +1,36 @@
+language: c
+sudo: false
+
+addons:
+  apt:
+    sources: kalakris-cmake
+    packages:
+      - cmake
+      - libcunit1-dev
+#     - libgeohash
+
+env:
+  matrix:
+    - LUA=lua5.1
+    - LUA=lua5.2
+    - LUA=lua5.3
+    - LUA=luajit
+    - LUA=luajit2.1
+
+branches:
+  only: master
+
+before_install:
+  - source <(curl -s http://rocks.simbio.se/travis.sh 2> /dev/null)
+  - git clone https://github.com/lyokato/libgeohash.git; cd libgeohash
+  - cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX
+  - make; make install; cd ..
+  - luarocks install busted
+
+install: luarocks make LIBGEOHASH_DIR=$PREFIX
+
+script: busted
+
+notifications:
+  email: true
+  irc: "chat.freenode.net#simbiose"
